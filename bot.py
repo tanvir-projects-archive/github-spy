@@ -59,3 +59,29 @@ def fetch_user_followers(username, token):
     else:
         print(f"Error fetching followers for {username}. Status code: {response.status_code}")
         return None
+
+def fetch_user_following(username, token):
+    """
+    Fetches following list for the GitHub user.
+    """
+    url = f'https://api.github.com/users/{username}/following'
+    headers = {'Authorization': f'token {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error fetching following list for {username}. Status code: {response.status_code}")
+        return None
+
+def process_user_info(user_info):
+    """
+    Process the user info to match the required format.
+    """
+    return {
+        "username": user_info.get('login', ''),
+        "id": user_info.get('id', ''),
+        "profile_url": user_info.get('html_url', ''),
+        "followers_url": user_info.get('followers_url', ''),
+        "following_url": user_info.get('following_url', ''),
+        "type": user_info.get('type', ''),
+    }
