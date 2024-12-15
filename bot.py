@@ -46,3 +46,16 @@ def fetch_user_repos(username, token):
     else:
         print(f"Error fetching repositories for {username}. Status code: {response.status_code}")
         return None
+
+def fetch_user_followers(usermane, token):
+    """
+    Fetches followers for the GitHub user.
+    """
+    url = f'https://api.github.com/users/{username}/followers'
+    headers = {'Authorization': f'token {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error fetching followers for {username}. Status code: {response.status_code}")
+        return None
