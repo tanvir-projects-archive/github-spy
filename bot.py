@@ -47,7 +47,7 @@ def fetch_user_repos(username, token):
         print(f"Error fetching repositories for {username}. Status code: {response.status_code}")
         return None
 
-def fetch_user_followers(usermane, token):
+def fetch_user_followers(username, token):
     """
     Fetches followers for the GitHub user.
     """
