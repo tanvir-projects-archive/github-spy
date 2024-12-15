@@ -20,3 +20,29 @@ def save_to_json(file_path, data):
     """
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4)
+
+def fetch_user_info(username, token):
+    """
+    Fetches user information from the GitHub API.
+    """
+    url = f'https://api.github.com/users/{username}'
+    headers = {'Authorization': f'token {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error fetching user info for {username}. Status code: {response.status_code}")
+        return None
+
+def fetch_user_repos(username, token):
+    """
+    Fetches repositories for the GitHub user.
+    """
+    url = f'https://api.github.com/users/{username}/repos'
+    headers = {'Authorization': f'token {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error fetching repositories for {username}. Status code: {response.status_code}")
+        return None
