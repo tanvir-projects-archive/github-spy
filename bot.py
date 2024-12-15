@@ -2,7 +2,7 @@ import os
 import json
 import requests
 
-GITHUB_TOKEN = ghp_xxxx
+GITHUB_TOKEN = "ghp_xxxx"
 
 def create_data_folder(username):
     """
