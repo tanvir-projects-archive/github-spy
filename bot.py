@@ -85,3 +85,77 @@ def process_user_info(user_info):
         "following_url": user_info.get('following_url', ''),
         "type": user_info.get('type', ''),
     }
+
+def process_repo_info(repos_info):
+    """
+    Process the repository info to match the required format.
+    """
+    repos_data = []
+    for repo in repos_info:
+        repos_data.append({
+            "name": repo.get('name', ''),
+            "repo_url": repo.get('html_url', ''),
+            "description": repo.get('description', ''),
+            "language": repo.get('language', ''),
+            "created_at": repo.get('created_at', ''),
+            "updated_at": repo.get('updated_at', ''),
+        })
+    return repos_data
+
+def process_followers_following(followers_info, is_following=False):
+    """
+    Process the followers or following info to match the required format.
+    """
+    followers_data = []
+    for follower in followers_info:
+        follower_data = {
+            "username": follower.get('login', ''),
+            "id": follower.get('id', ''),
+            "profile_url": follower.get('html_url', ''),
+            "followers_url": follower.get('followers_url', ''),
+            "following_url": follower.get('following_url', ''),
+            "type": follower.get('type', ''),
+        }
+        if not is_following:
+            del follower_data["type"]
+        followers_data.append(follower_data)
+    return followers_data
+
+def main():
+    username = input("Enter the GitHub username to fetch: ")
+
+    print(f"Fetching data for {username}...")
+
+    token = GITHUB_TOKEN if GITHUB_TOKEN else input("Enter your GitHub Personal Access Token: ")
+
+    user_folder = create_data_folder(username)
+
+    user_info = fetch_user_info(username, token)
+    if user_info:
+        processed_user_info = process_user_info(user_info)
+        save_to_json(os.path.join(user_folder, 'user_info.json'), processed_user_info)
+
+    repos_info = fetch_user_repos(username, token)
+    if repos_info:
+        processed_repos_info = process_repo_info(repos_info)
+        save_to_json(os.path.join(user_folder, 'repos.json'), processed_repos_info)
+
+    followers_info = fetch_user_followers(username, token)
+    if followers_info:
+        processed_followers_info = process_followers_following(followers_info)
+        save_to_json(os.path.join(user_folder, 'followers.json'), processed_followers_info)
+
+    following_info = fetch_user_following(username, token)
+    if following_info:
+        processed_following_info = process_followers_following(following_info, is_following=True)
+        save_to_json(os.path.join(user_folder, 'following.json'), processed_following_info)
+
+    summary = {
+        "total_repos": len(repos_info) if repos_info else 0,
+        "total_followers": len(followers_info) if followers_info else 0,
+        "total_following": len(following_info) if following_info else 0,
+        "profile_url": processed_user_info['profile_url'],
+    }
+    save_to_json(os.path.join(user_folder, 'summary.json'), summary)
+
+    print(f"Your data has been stored at: {os.path.abspath(user_folder)}")
