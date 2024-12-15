@@ -2,6 +2,8 @@ import os
 import json
 import requests
 
+GITHUB_TOKEN = ghp_xxxx
+
 def create_data_folder(username):
     """
     Creates a folder named after the GitHub username in the 'data' directory.
@@ -159,3 +161,6 @@ def main():
     save_to_json(os.path.join(user_folder, 'summary.json'), summary)
 
     print(f"Your data has been stored at: {os.path.abspath(user_folder)}")
+
+if __name__ == "__main__":
+    main()
