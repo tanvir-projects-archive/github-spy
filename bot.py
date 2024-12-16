@@ -112,7 +112,7 @@ async def send_telegram_message(zip_file, username, profile_url):
 
     message = (
         f"*Name:* `{username}`\n"
-        f"*URL:* [GitHub Profile]({profile_url})"
+        f"*URL:* [github.com/{username}]({profile_url})"
     )
 
     with open(zip_file, 'rb') as file:
