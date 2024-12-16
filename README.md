@@ -1,53 +1,58 @@
-# GitHub Profile Data Scrapper
-This Python script fetches data from a GitHub user's profile and stores it locally in a structured format, following:
-- User info
-- List of repositories
-- List of followers
-- List of users the person is following
+# GitHub Profile Data Scraper with Telegram Integration
+- This Python script fetches data from a GitHub user's profile and sends it directly to a Telegram chat, along with saving it locally
 
 ## Features
-- Saves data in JSON format in a user-specific folder.
-- Organizes data into multiple JSON files:
-  - user_info.json
-  - repos.json
-  - followers.json
-  - following.json
-  - summary.json
+- Fetches data from a GitHub user's profile:
+  - **User Info**
+  - **Repositories**
+  - **Followers**
+  - **Following**
+- Saves the data as JSON files in a user-specific folder
+- Sends a Telegram message with:
+  - **Name and profile link**
+  - **A ZIP file containing all JSON files**
 
 ## Prerequisites
-Before running this script, ensure you have:
-- A **GitHub Personal Access Token** (PAT) for accessing the GitHub API.
-- To create a GitHub Personal Access Token (PAT), follow [GitHub's official guide](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+1. **GitHub Personal Access Token (PAT):**
+- Create one by following [GitHub's guide](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+
+2. **Telegram Bot Token:**
+- Get a bot token by creating a bot using [BotFather](https://t.me/botfather)
+
+3. **Chat ID:**
+- Find your Telegram chat ID
 
 ## Installation
-1. Clone or download the repository:
-    ```bash
-    git clone https://github.com/tanvir-projects-archive/github-spy
-    cd github-spy
-    ```
+1. Clone this repository:
+```bash
+git clone https://github.com/tanvir-projects-archive/github-spy && cd github-spy
+```
 
-2. Install the required Python libraries:
-    ```bash
-    pip install -r requirements.txt
-    ```
+2. Install required libraries:
+```bash
+pip install -r requirements.txt
+```
+
+## Setup
+1. Edit the script bot.py and replace these placeholders:
+- GITHUB_TOKEN = "ghp_xxxx"
+  - Your github personal access token
+- TELEGRAM_TOKEN = "xxxx"
+  - Your telegram bot api token
+- CHAT_ID = "-100xxxx"
+  - Your chat ID
 
 ## Usage
-1. Replace "ghp_xxxx" in the GITHUB_TOKEN variable in the script with your GitHub token like:
-    ```bash
-    GITHUB_TOKEN = "ghp_asdfqwertypoiuytlkjhg"
-    ```
-   Alternatively, you can enter your token when prompted
+1. Run the script:
+```bash
+python bot.py
+```
 
-2. Run the script:
-    ```bash
-    python bot.py
-    ```
-
-3. Enter the GitHub username you wish to fetch data for when prompted
+2. Enter the GitHub username when prompted
 
 ## Output
-The script will create a folder path:
-
+1. **Locally Saved Data:**
+- The script creates a folder for the username:
 - data/username/
 - Inside the username folder, the following files will be saved:
  - user_info.json
@@ -55,3 +60,22 @@ The script will create a folder path:
  - followers.json
  - following.json
  - summary.json
+- data/archive/
+- The archive folder will store ZIP files of each username's data for easier transfer
+
+2. **Telegram Message:**
+- The bot sends like:
+```bash
+Name: tanvirr007
+URL: github.com/tanvirr007
+```
+- The ZIP file containing all JSON files
+
+## Notes
+- Ensure your tokens are correct to avoid errors
+- The script works for users with many followers and repositories by handling pagination
+- Enjoy scraping GitHub profiles with Telegram notifications!
+
+## Author
+- This script is created by [тαиνir](https://github.com/tanvirr007)
+- If you find any issues or want to improve the script, feel free to open a pull request and contact me on [Telegram](https://t.me/tanvirr007)
