@@ -38,42 +38,66 @@ def fetch_user_info(username, token):
 
 def fetch_user_repos(username, token):
     """
-    Fetches repositories for the GitHub user.
+    Fetches all repositories for the GitHub user, handling pagination.
     """
-    url = f'https://api.github.com/users/{username}/repos'
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error fetching repositories for {username}. Status code: {response.status_code}")
-        return None
+    repos_data = []
+    page = 1
+    while True:
+        url = f'https://api.github.com/users/{username}/repos?page={page}&per_page=100'
+        headers = {'Authorization': f'token {token}'}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            repos_info = response.json()
+            if not repos_info:
+                break
+            repos_data.extend(repos_info)
+            page += 1
+        else:
+            print(f"Error fetching repositories for {username}. Status code: {response.status_code}")
+            break
+    return repos_data
 
 def fetch_user_followers(username, token):
     """
-    Fetches followers for the GitHub user.
+    Fetches all followers for the GitHub user, handling pagination.
     """
-    url = f'https://api.github.com/users/{username}/followers'
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error fetching followers for {username}. Status code: {response.status_code}")
-        return None
+    followers_data = []
+    page = 1
+    while True:
+        url = f'https://api.github.com/users/{username}/followers?page={page}&per_page=100'
+        headers = {'Authorization': f'token {token}'}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            followers_info = response.json()
+            if not followers_info:
+                break
+            followers_data.extend(followers_info)
+            page += 1
+        else:
+            print(f"Error fetching followers for {username}. Status code: {response.status_code}")
+            break
+    return followers_data
 
 def fetch_user_following(username, token):
     """
-    Fetches following list for the GitHub user.
+    Fetches all following list for the GitHub user, handling pagination.
     """
-    url = f'https://api.github.com/users/{username}/following'
-    headers = {'Authorization': f'token {token}'}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error fetching following list for {username}. Status code: {response.status_code}")
-        return None
+    following_data = []
+    page = 1
+    while True:
+        url = f'https://api.github.com/users/{username}/following?page={page}&per_page=100'
+        headers = {'Authorization': f'token {token}'}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            following_info = response.json()
+            if not following_info:
+                break
+            following_data.extend(following_info)
+            page += 1
+        else:
+            print(f"Error fetching following list for {username}. Status code: {response.status_code}")
+            break
+    return following_data
 
 def process_user_info(user_info):
     """
@@ -118,6 +142,8 @@ def process_followers_following(followers_info, is_following=False):
             "following_url": follower.get('following_url', ''),
             "type": follower.get('type', ''),
         }
+        if not is_following:
+            del follower_data["type"]
         followers_data.append(follower_data)
     return followers_data
 
