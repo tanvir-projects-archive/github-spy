@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import shutil
 
 GITHUB_TOKEN = "ghp_xxxx"
 
@@ -147,6 +148,22 @@ def process_followers_following(followers_info, is_following=False):
         followers_data.append(follower_data)
     return followers_data
 
+def zip_and_move_folder(username):
+    """
+    Zips the user folder and moves it to the archive directory.
+    """
+    user_folder = os.path.join('data', username)
+    archive_folder = os.path.join('data', 'archive')
+
+    if not os.path.exists(archive_folder):
+        os.makedirs(archive_folder)
+
+    zip_file = os.path.join(archive_folder, f"{username}.zip")
+    shutil.make_archive(zip_file.replace('.zip', ''), 'zip', user_folder)
+
+    print(f"Your raw folder: {user_folder}")
+    print(f"Your compressed zip file: {zip_file}")
+
 def main():
     username = input("Enter the GitHub username to fetch: ")
 
@@ -184,7 +201,7 @@ def main():
     }
     save_to_json(os.path.join(user_folder, 'summary.json'), summary)
 
-    print(f"Your data has been stored at: {os.path.abspath(user_folder)}")
+    zip_and_move_folder(username)
 
 if __name__ == "__main__":
     main()
