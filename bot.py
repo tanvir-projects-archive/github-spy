@@ -81,7 +81,7 @@ def process_user_info(user_info):
     """
     return {
         "username": user_info.get('login', ''),
-        "id": user_info.get('id', ''),
+        "user_id": user_info.get('id', ''),
         "profile_url": user_info.get('html_url', ''),
         "followers_url": user_info.get('followers_url', ''),
         "following_url": user_info.get('following_url', ''),
@@ -112,14 +112,12 @@ def process_followers_following(followers_info, is_following=False):
     for follower in followers_info:
         follower_data = {
             "username": follower.get('login', ''),
-            "id": follower.get('id', ''),
+            "user_id": follower.get('id', ''),
             "profile_url": follower.get('html_url', ''),
             "followers_url": follower.get('followers_url', ''),
             "following_url": follower.get('following_url', ''),
             "type": follower.get('type', ''),
         }
-        if not is_following:
-            del follower_data["type"]
         followers_data.append(follower_data)
     return followers_data
 
@@ -156,7 +154,7 @@ def main():
         "total_repos": len(repos_info) if repos_info else 0,
         "total_followers": len(followers_info) if followers_info else 0,
         "total_following": len(following_info) if following_info else 0,
-        "profile_url": processed_user_info['profile_url'],
+        "profile_url": processed_user_info['profile_url'] if user_info else '',
     }
     save_to_json(os.path.join(user_folder, 'summary.json'), summary)
 
